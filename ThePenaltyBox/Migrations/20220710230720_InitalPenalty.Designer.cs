@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ThePenaltyBox.Data;
+using ThePenaltyBoxAPI.Data;
 
 #nullable disable
 
-namespace ThePenaltyBox.Migrations
+namespace ThePenaltyBoxAPI.Migrations
 {
     [DbContext(typeof(PenaltyContext))]
     [Migration("20220710230720_InitalPenalty")]
@@ -24,7 +24,7 @@ namespace ThePenaltyBox.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ThePenaltyBox.Models.Penalty", b =>
+            modelBuilder.Entity("ThePenaltyBoxAPI.Models.Penalty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

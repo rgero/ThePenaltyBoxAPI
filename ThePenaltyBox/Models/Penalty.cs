@@ -1,4 +1,4 @@
-﻿namespace ThePenaltyBox.Models
+﻿namespace ThePenaltyBoxAPI.Models
 {
     public class Penalty
     {

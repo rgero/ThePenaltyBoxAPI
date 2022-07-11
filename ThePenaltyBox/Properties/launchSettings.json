@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "ThePenaltyBox": {
+    "ThePenaltyBoxAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

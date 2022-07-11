@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ThePenaltyBox.Data;
-using ThePenaltyBox.Models;
+using ThePenaltyBoxAPI.Data;
+using ThePenaltyBoxAPI.Models;
 
-namespace ThePenaltyBox.Controllers
+namespace ThePenaltyBoxAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

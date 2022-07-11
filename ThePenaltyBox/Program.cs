@@ -1,4 +1,4 @@
-using ThePenaltyBox.Data;
+using ThePenaltyBoxAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

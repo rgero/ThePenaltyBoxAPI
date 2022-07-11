@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ThePenaltyBox.Migrations
+namespace ThePenaltyBoxAPI.Migrations
 {
     public partial class InitalPenalty : Migration
     {
