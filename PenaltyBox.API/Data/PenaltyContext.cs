@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ThePenaltyBoxAPI.Models;
+using PenaltyBox.API.Models;
 
-namespace ThePenaltyBoxAPI.Data
+namespace PenaltyBox.API.Data
 {
     public class PenaltyContext : DbContext
     {
