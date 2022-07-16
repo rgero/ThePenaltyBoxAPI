@@ -25,10 +25,10 @@ namespace PenaltyBox.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Penalty>>> GetPenalties()
         {
-          if (_context.Penalties == null)
-          {
-              return NotFound();
-          }
+            if (_context.Penalties == null)
+            {
+                return NotFound();
+            }
             return await _context.Penalties.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace PenaltyBox.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Penalty>> GetPenalty(int id)
         {
-          if (_context.Penalties == null)
-          {
-              return NotFound();
-          }
+            if (_context.Penalties == null)
+            {
+                return NotFound();
+            }
             var penalty = await _context.Penalties.FindAsync(id);
 
             if (penalty == null)
@@ -86,10 +86,11 @@ namespace PenaltyBox.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Penalty>> PostPenalty(Penalty penalty)
         {
-          if (_context.Penalties == null)
-          {
-              return Problem("Entity set 'PenaltyContext.Penalties'  is null.");
-          }
+            if (_context.Penalties == null)
+            {
+                return Problem("Entity set 'PenaltyContext.Penalties'  is null.");
+            }
+
             _context.Penalties.Add(penalty);
             await _context.SaveChangesAsync();
 
