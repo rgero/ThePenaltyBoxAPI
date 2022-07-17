@@ -11,69 +11,25 @@ using Xunit;
 
 namespace PenaltyBox.API.Tests
 {
-    public class PenaltyBoxAPITests
+    public class PenaltyBoxAPITests : IClassFixture<PenaltySeedDataFixture>
     {
+        readonly PenaltySeedDataFixture fixture;
         readonly PenaltiesController controller;
-        readonly PenaltyContext context;
-        readonly DbContextOptions<PenaltyContext> options;
 
-        public PenaltyBoxAPITests()
+        public PenaltyBoxAPITests(PenaltySeedDataFixture fixture)
         {
-            options = new DbContextOptionsBuilder<PenaltyContext>().UseInMemoryDatabase("TestingDatabase").Options;
-            context = new PenaltyContext(options);
-
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-
-            controller = new PenaltiesController(context);
+            this.fixture = fixture;
+            controller = new PenaltiesController(fixture.Context);
         }
 
         [Fact]
-        public async void GetNoPenaltiesTest ()
+        public void GetsNumberOfPenaltiesTest()
         {
-            var result = await controller.GetPenalties();
-            var actionResult= Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
-
-            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
-            Assert.Equal(0, penaltyList.Count);
-        }
-
-        [Fact]
-        public async void GetsNumberOfPenaltiesTest()
-        {
-            // Set Up - Add 2 valid penalties
-            Penalty testPenalty = new()
-            {
-                Player = "Patrice",
-                Team = "Bruins",
-                Opponent = "Islanders",
-                GameDate = new System.DateTime(),
-                Home = false,
-                PenaltyName = "Hooking",
-                Referees = new string[] { "Steve", "Bob" }
-            };
-
-            Penalty testPenalty2 = new()
-            {
-                Player = "Shamed",
-                Team = "Avalanche",
-                Opponent = "Islanders",
-                GameDate = new System.DateTime(),
-                Home = false,
-                PenaltyName = "Hooking",
-                Referees = new string[] { "Steve", "Bob" }
-            };
-
-            List<Penalty> testPenalties = new() { testPenalty, testPenalty2 };
-
-            context.AddRange(testPenalties);
-            await context.SaveChangesAsync();
-
-            var result = await controller.GetPenalties();
+            var result = controller.GetPenalties().Result;
             var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
 
             List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
-            Assert.Equal(2, penaltyList.Count);
+            Assert.Equal(5, penaltyList.Count);
         }
 
         [Fact]
@@ -124,39 +80,22 @@ namespace PenaltyBox.API.Tests
         }
 
         [Fact]
-        public async void DeletePenaltyTest()
+        public void DeletePenaltyTest()
         {
-            Penalty testPenalty = new()
-            {
-                Player = "Patrice",
-                Team = "Bruins",
-                Opponent = "Islanders",
-                GameDate = new System.DateTime(),
-                Home = false,
-                PenaltyName = "Hooking",
-                Referees = new string[] { "Steve", "Bob" }
-            };
-
-            context.Add(testPenalty);
-            await context.SaveChangesAsync();
-
-            List<Penalty> penaltyList = await context.Penalties.ToListAsync<Penalty>();
-            Assert.Equal(1, penaltyList.Count);
-
             int targetID = 1;
-            var result = await controller.DeletePenalty(targetID);
+            var result = controller.DeletePenalty(targetID).Result;
 
             Assert.NotNull(result);
             Assert.IsType<NoContentResult>(result);
 
-            penaltyList = await context.Penalties.ToListAsync<Penalty>();
-            Assert.Equal(0, penaltyList.Count);
+            List<Penalty> penaltyList = this.fixture.Context.Penalties.ToList<Penalty>();
+            Assert.Equal(4, penaltyList.Count);
         }
 
         [Fact]
         public async void NoDeleteInvalidPenaltyTest()
         {
-            int targetID = 2;
+            int targetID = 22;
             var result = await controller.DeletePenalty(targetID);
 
             Assert.NotNull(result);

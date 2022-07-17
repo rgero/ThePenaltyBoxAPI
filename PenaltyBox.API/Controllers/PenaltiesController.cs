@@ -69,13 +69,23 @@ namespace PenaltyBox.API.Controllers
             DateTime startDay = DateParser.ParseString(startDate, new DateTime(2020, 01, 01));
             DateTime endDay = DateParser.ParseString(endDate, DateTime.Today.AddDays(1));
 
+            bool homeStatus = false;
+            if (!String.IsNullOrEmpty(home))
+            {
+                bool successfulConversion = Boolean.TryParse(home, out homeStatus);
+                if (!successfulConversion)
+                {
+                    home = null;
+                }
+            }
+
             // Need to Handle Refs
             return await _context.Penalties.Where((penalty) => String.IsNullOrEmpty(penaltyName) || penaltyName.Equals(penalty.PenaltyName))
                                            .Where((penalty) => String.IsNullOrEmpty(playerName) || playerName.Equals(penalty.Player))
                                            .Where((penalty) => String.IsNullOrEmpty(teamName) || teamName.Equals(penalty.Team))
                                            .Where((penalty) => String.IsNullOrEmpty(opponentName) || opponentName.Equals(penalty.Opponent))
                                            .Where((penalty) => startDay <= penalty.GameDate && endDay >= penalty.GameDate)
-                                           .Where((penalty) => String.IsNullOrEmpty(home) || Boolean.Parse(home))
+                                           .Where((penalty) => String.IsNullOrEmpty(home) || (homeStatus == penalty.Home))
                                            .ToListAsync();
         }
 
@@ -145,7 +155,7 @@ namespace PenaltyBox.API.Controllers
             _context.Penalties.AddRange(penalties);
             await _context.SaveChangesAsync();
 
-            var lastPenalty = penalties[penalties.Count - 1];
+            var lastPenalty = penalties[^1];
 
             return CreatedAtAction("GetPenalty", new { id = lastPenalty.Id }, lastPenalty);
         }

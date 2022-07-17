@@ -2,7 +2,7 @@
 {
     public static class DateParser
     {
-        public static DateTime ParseString(string dateString, DateTime defaultValue)
+        public static DateTime ParseString(string? dateString, DateTime defaultValue)
         {
             DateTime targetDay;
             if (!String.IsNullOrEmpty(dateString))
