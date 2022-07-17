@@ -71,6 +71,17 @@ namespace PenaltyBox.API.Tests
         }
 
         [Fact]
+        public void Filter_PlayerName_Multiple()
+        {
+            inputParams.playerName = "Shamed,Patrice";
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(3, penaltyList.Count);
+        }
+
+        [Fact]
         public void Filter_PlayerName_InvalidTest()
         {
             inputParams.playerName = "abc123";
@@ -90,6 +101,17 @@ namespace PenaltyBox.API.Tests
 
             List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
             Assert.Single(penaltyList);
+        }
+
+        [Fact]
+        public void Filter_TeamName_MultipleTest()
+        {
+            inputParams.teamName = "Bruins,Leafs";
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(2,penaltyList.Count);
         }
 
         [Fact]
@@ -113,7 +135,40 @@ namespace PenaltyBox.API.Tests
             List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
             Assert.Equal(3, penaltyList.Count);
         }
-        
+
+        [Fact]
+        public void Filter_Penalty_Multiple()
+        {
+            inputParams.penaltyName = "Tripping,Fighting";
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(2, penaltyList.Count);
+        }
+
+        [Fact]
+        public void Filter_Opponent_Multiple()
+        {
+            inputParams.opponentName = "Leafs,Bruins";
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(2, penaltyList.Count);
+        }
+
+        [Fact]
+        public void Filter_Opponent_Valid()
+        {
+            inputParams.opponentName = "Islanders";
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(3, penaltyList.Count);
+        }
+
         [Fact]
         public void Filter_Multiple_PlayerTeam()
         {
@@ -226,7 +281,7 @@ namespace PenaltyBox.API.Tests
             var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
 
             List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
-            Assert.Equal(4, penaltyList.Count());
+            Assert.Equal(4, penaltyList.Count);
         }
 
 

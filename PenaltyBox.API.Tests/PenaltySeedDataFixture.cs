@@ -57,7 +57,7 @@ namespace PenaltyBox.API.Tests
                 {
                     Player = "Shamed",
                     Team = "Avalanche",
-                    Opponent = "Islanders",
+                    Opponent = "Leafs",
                     GameDate = DateTime.Parse("2022-06-15"),
                     Home = true,
                     PenaltyName = "Hooking",
@@ -67,7 +67,7 @@ namespace PenaltyBox.API.Tests
                 {
                     Player = "Shamed",
                     Team = "Avalanche",
-                    Opponent = "Islanders",
+                    Opponent = "Bruins",
                     GameDate = DateTime.Parse("2022-02-22"),
                     Home = false,
                     PenaltyName = "Tripping",

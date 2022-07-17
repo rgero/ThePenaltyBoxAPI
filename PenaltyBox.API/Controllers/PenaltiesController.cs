@@ -79,17 +79,18 @@ namespace PenaltyBox.API.Controllers
                 }
             }
 
-            List<string> refList = new List<string>();
-            if (!String.IsNullOrEmpty(referees))
-            {
-                refList = referees.Split(',').ToList();
-            }
+            List<string> opponentList = StringParser.ParseString(opponentName);
+            List<string> refList = StringParser.ParseString(referees);
+            List<string> penaltyList = StringParser.ParseString(penaltyName);
+            List<string> playerList = StringParser.ParseString(playerName);
+            List<string> teamList = StringParser.ParseString(teamName);
+
 
             // Need to Handle Refs
-            return await _context.Penalties.Where((penalty) => String.IsNullOrEmpty(penaltyName) || penaltyName.Equals(penalty.PenaltyName))
-                                           .Where((penalty) => String.IsNullOrEmpty(playerName) || playerName.Equals(penalty.Player))
-                                           .Where((penalty) => String.IsNullOrEmpty(teamName) || teamName.Equals(penalty.Team))
-                                           .Where((penalty) => String.IsNullOrEmpty(opponentName) || opponentName.Equals(penalty.Opponent))
+            return await _context.Penalties.Where((penalty) => String.IsNullOrEmpty(penaltyName) || penaltyList.Contains(penalty.PenaltyName))
+                                           .Where((penalty) => String.IsNullOrEmpty(playerName) || playerList.Contains(penalty.Player))
+                                           .Where((penalty) => String.IsNullOrEmpty(teamName) || teamList.Contains(penalty.Team))
+                                           .Where((penalty) => String.IsNullOrEmpty(opponentName) || opponentList.Contains(penalty.Opponent))
                                            .Where((penalty) => startDay <= penalty.GameDate && endDay >= penalty.GameDate)
                                            .Where((penalty) => String.IsNullOrEmpty(home) || (homeStatus == penalty.Home))
                                            .Where((penalty) => String.IsNullOrEmpty(referees) || penalty.Referees.ToList().Intersect(refList).Any())
