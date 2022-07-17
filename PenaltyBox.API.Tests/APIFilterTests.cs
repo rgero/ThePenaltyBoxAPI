@@ -207,6 +207,28 @@ namespace PenaltyBox.API.Tests
             Assert.Equal(2, penaltyList.Count);
         }
 
+        [Fact]
+        public void Filter_Referee_Single()
+        {
+            inputParams.referees = "Ralph";
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Single(penaltyList);
+        }
+
+        [Fact]
+        public void Filter_Referee_Multiple()
+        {
+            inputParams.referees = "Steve,Bob";
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(4, penaltyList.Count());
+        }
+
 
 
     }

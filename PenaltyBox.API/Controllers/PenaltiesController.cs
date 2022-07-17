@@ -79,6 +79,12 @@ namespace PenaltyBox.API.Controllers
                 }
             }
 
+            List<string> refList = new List<string>();
+            if (!String.IsNullOrEmpty(referees))
+            {
+                refList = referees.Split(',').ToList();
+            }
+
             // Need to Handle Refs
             return await _context.Penalties.Where((penalty) => String.IsNullOrEmpty(penaltyName) || penaltyName.Equals(penalty.PenaltyName))
                                            .Where((penalty) => String.IsNullOrEmpty(playerName) || playerName.Equals(penalty.Player))
@@ -86,6 +92,7 @@ namespace PenaltyBox.API.Controllers
                                            .Where((penalty) => String.IsNullOrEmpty(opponentName) || opponentName.Equals(penalty.Opponent))
                                            .Where((penalty) => startDay <= penalty.GameDate && endDay >= penalty.GameDate)
                                            .Where((penalty) => String.IsNullOrEmpty(home) || (homeStatus == penalty.Home))
+                                           .Where((penalty) => String.IsNullOrEmpty(referees) || penalty.Referees.ToList().Intersect(refList).Any())
                                            .ToListAsync();
         }
 

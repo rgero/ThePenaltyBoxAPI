@@ -51,7 +51,7 @@ namespace PenaltyBox.API.Tests
                     GameDate = DateTime.Parse("2022-06-22"),
                     Home = false,
                     PenaltyName = "Hooking",
-                    Referees = new string[] { "Ralph", "Bob" }
+                    Referees = new string[] { "Ralph", "George" }
                 },
                 new Penalty()
                 {
