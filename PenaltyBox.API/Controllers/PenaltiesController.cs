@@ -50,6 +50,29 @@ namespace PenaltyBox.API.Controllers
             return penalty;
         }
 
+        [HttpGet("filter/{playerName?}/{teamName?}/{date?}/{opponentName?}/{penaltyName?}/{home?}/{referees?}/")]
+        public async Task<ActionResult<IEnumerable<Penalty>>> GetFilteredPenalty(string? playerName = null,
+                                                                    string? teamName = null,
+                                                                    string? date = null,
+                                                                    string? opponentName = null,
+                                                                    string? penaltyName = null,
+                                                                    string? home = null,
+                                                                    string? referees = null)
+        {
+            if (_context.Penalties == null)
+            {
+                return NotFound();
+            }
+
+            // How to handle Date, Home/Away and Referees
+
+            return await _context.Penalties.Where((penalty) => String.IsNullOrEmpty(penaltyName) || penaltyName.Equals(penalty.PenaltyName))
+                                           .Where((penalty) => String.IsNullOrEmpty(playerName) || playerName.Equals(penalty.Player))
+                                           .Where((penalty) => String.IsNullOrEmpty(teamName) || teamName.Equals(penalty.Team))
+                                           .Where((penalty) => String.IsNullOrEmpty(opponentName) || opponentName.Equals(penalty.Opponent))
+                                           .ToListAsync();
+        }
+
         // PUT: api/Penalties/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -83,7 +106,7 @@ namespace PenaltyBox.API.Controllers
 
         // POST: api/Penalties
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("AddPenalty")]
         public async Task<ActionResult<Penalty>> PostPenalty(Penalty penalty)
         {
             if (_context.Penalties == null)
@@ -95,6 +118,22 @@ namespace PenaltyBox.API.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPenalty", new { id = penalty.Id }, penalty);
+        }
+
+        [HttpPost("AddPenalties")]
+        public async Task<ActionResult<Penalty>> PostPenalties(List<Penalty> penalties)
+        {
+            if (_context.Penalties == null)
+            {
+                return Problem("Entity set 'PenaltyContext.Penalties'  is null.");
+            }
+
+            _context.Penalties.AddRange(penalties);
+            await _context.SaveChangesAsync();
+
+            var lastPenalty = penalties[penalties.Count - 1];
+
+            return CreatedAtAction("GetPenalty", new { id = lastPenalty.Id }, lastPenalty);
         }
 
         // DELETE: api/Penalties/5
