@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PenaltyBox.API.Data;
 using PenaltyBox.API.Models;
+using PenaltyBox.API.Utilities;
 
 namespace PenaltyBox.API.Controllers
 {
@@ -50,10 +51,11 @@ namespace PenaltyBox.API.Controllers
             return penalty;
         }
 
-        [HttpGet("filter/{playerName?}/{teamName?}/{date?}/{opponentName?}/{penaltyName?}/{home?}/{referees?}/")]
+        [HttpGet("filter")]
         public async Task<ActionResult<IEnumerable<Penalty>>> GetFilteredPenalty(string? playerName = null,
                                                                     string? teamName = null,
-                                                                    string? date = null,
+                                                                    string? startDate = null,
+                                                                    string? endDate = null,
                                                                     string? opponentName = null,
                                                                     string? penaltyName = null,
                                                                     string? home = null,
@@ -64,12 +66,16 @@ namespace PenaltyBox.API.Controllers
                 return NotFound();
             }
 
-            // How to handle Date, Home/Away and Referees
+            DateTime startDay = DateParser.ParseString(startDate, new DateTime(2020, 01, 01));
+            DateTime endDay = DateParser.ParseString(endDate, DateTime.Today.AddDays(1));
+
+            // Need to Handle Refs and Home/Away
 
             return await _context.Penalties.Where((penalty) => String.IsNullOrEmpty(penaltyName) || penaltyName.Equals(penalty.PenaltyName))
                                            .Where((penalty) => String.IsNullOrEmpty(playerName) || playerName.Equals(penalty.Player))
                                            .Where((penalty) => String.IsNullOrEmpty(teamName) || teamName.Equals(penalty.Team))
                                            .Where((penalty) => String.IsNullOrEmpty(opponentName) || opponentName.Equals(penalty.Opponent))
+                                           .Where((penalty) => startDay <= penalty.GameDate && endDay >= penalty.GameDate)
                                            .ToListAsync();
         }
 
@@ -114,6 +120,9 @@ namespace PenaltyBox.API.Controllers
                 return Problem("Entity set 'PenaltyContext.Penalties'  is null.");
             }
 
+            // Set the date to Midnight.
+            penalty.GameDate = penalty.GameDate.Date;
+
             _context.Penalties.Add(penalty);
             await _context.SaveChangesAsync();
 
@@ -126,6 +135,11 @@ namespace PenaltyBox.API.Controllers
             if (_context.Penalties == null)
             {
                 return Problem("Entity set 'PenaltyContext.Penalties'  is null.");
+            }
+
+            foreach(Penalty penalty in penalties)
+            {
+                penalty.GameDate = penalty.GameDate.Date;
             }
 
             _context.Penalties.AddRange(penalties);
