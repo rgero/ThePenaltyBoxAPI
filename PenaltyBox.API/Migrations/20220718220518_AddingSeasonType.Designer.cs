@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PenaltyBox.API.Data;
 
@@ -11,9 +12,10 @@ using PenaltyBox.API.Data;
 namespace PenaltyBox.API.Migrations
 {
     [DbContext(typeof(PenaltyContext))]
-    partial class PenaltyContextModelSnapshot : ModelSnapshot
+    [Migration("20220718220518_AddingSeasonType")]
+    partial class AddingSeasonType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

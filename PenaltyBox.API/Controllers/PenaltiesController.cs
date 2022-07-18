@@ -59,7 +59,8 @@ namespace PenaltyBox.API.Controllers
                                                                     string? opponentName = null,
                                                                     string? penaltyName = null,
                                                                     string? home = null,
-                                                                    string? referees = null)
+                                                                    string? referees = null,
+                                                                    string? seasonType = null)
         {
             if (_context.Penalties == null)
             {
@@ -85,6 +86,11 @@ namespace PenaltyBox.API.Controllers
             List<string> playerList = StringParser.ParseString(playerName);
             List<string> teamList = StringParser.ParseString(teamName);
 
+            List<SeasonType> seasonTypeList = StringParser.ParseSeasonType(seasonType);
+            if (seasonTypeList.Count == 0)
+            {
+                seasonType = null;
+            }
 
             // Need to Handle Refs
             return await _context.Penalties.Where((penalty) => String.IsNullOrEmpty(penaltyName) || penaltyList.Contains(penalty.PenaltyName))
@@ -94,6 +100,7 @@ namespace PenaltyBox.API.Controllers
                                            .Where((penalty) => startDay <= penalty.GameDate && endDay >= penalty.GameDate)
                                            .Where((penalty) => String.IsNullOrEmpty(home) || (homeStatus == penalty.Home))
                                            .Where((penalty) => String.IsNullOrEmpty(referees) || penalty.Referees.ToList().Intersect(refList).Any())
+                                           .Where((penalty) => String.IsNullOrEmpty(seasonType) || seasonTypeList.Contains(penalty.SeasonType))
                                            .ToListAsync();
         }
 

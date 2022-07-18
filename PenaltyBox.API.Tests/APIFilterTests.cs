@@ -26,6 +26,7 @@ namespace PenaltyBox.API.Tests
             public string? penaltyName = null;
             public string? home = null;
             public string? referees = null;
+            public string? seasonType = null;
         };
 
         readonly PenaltiesController controller;
@@ -46,7 +47,8 @@ namespace PenaltyBox.API.Tests
                                                  inputParams.opponentName, 
                                                  inputParams.penaltyName,
                                                  inputParams.home,
-                                                 inputParams.referees).Result;
+                                                 inputParams.referees,
+                                                 inputParams.seasonType).Result;
         }
 
         [Fact]
@@ -284,7 +286,47 @@ namespace PenaltyBox.API.Tests
             Assert.Equal(4, penaltyList.Count);
         }
 
+        [Fact]
+        public void Filter_Season_Type()
+        {
+            inputParams.seasonType = SeasonType.Playoffs.ToString();
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
 
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Single(penaltyList);
+
+            inputParams.seasonType = SeasonType.Preseason.ToString();
+            result = GetActionResult(inputParams);
+            actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(3,penaltyList.Count);
+        }
+
+        [Fact]
+        public void Filter_Season_Multiple()
+        {
+            inputParams.seasonType = String.Join(',', new string[]{ SeasonType.Regular.ToString(), SeasonType.Playoffs.ToString()}) ;
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(2, penaltyList.Count);
+        }
+
+        [Fact]
+        public void Filter_Season_Invalid()
+        {
+            // Is this what I want though? Do I want to error it out or ignore it?
+
+            inputParams.seasonType = "IncorrectValue";
+            var result = GetActionResult(inputParams);
+            var actionResult = Assert.IsType<ActionResult<IEnumerable<Penalty>>>(result);
+
+            List<Penalty> penaltyList = Assert.IsType<List<Penalty>>(actionResult.Value);
+            Assert.Equal(5, penaltyList.Count);
+        }
 
     }
 }

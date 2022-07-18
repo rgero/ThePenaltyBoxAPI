@@ -2,6 +2,13 @@
 
 namespace PenaltyBox.API.Models
 {
+    public enum SeasonType
+    {
+        Preseason,
+        Regular,
+        Playoffs
+    }
+
     public class Penalty
     {
         public int Id { get; set; }
@@ -13,6 +20,8 @@ namespace PenaltyBox.API.Models
         public string Opponent { get; set; }
         public string[] Referees { get; set; }
         public bool Home { get; set; }
+
+        public SeasonType SeasonType { get; set; }
 
     }
 }

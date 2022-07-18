@@ -31,7 +31,8 @@ namespace PenaltyBox.API.Tests
                     GameDate = DateTime.Parse("2022-07-01"),
                     Home = false,
                     PenaltyName = "Fighting",
-                    Referees = new string[] { "Steve", "Bob" }
+                    Referees = new string[] { "Steve", "Bob" },
+                    SeasonType = SeasonType.Playoffs
                 },
                 new Penalty()
                 {
@@ -41,7 +42,8 @@ namespace PenaltyBox.API.Tests
                     GameDate = DateTime.Parse("2022-07-05"),
                     Home = true,
                     PenaltyName = "Hooking",
-                    Referees = new string[] { "Steve", "Bob" }
+                    Referees = new string[] { "Steve", "Bob" },
+                    SeasonType = SeasonType.Regular
                 },
                 new Penalty()
                 {
