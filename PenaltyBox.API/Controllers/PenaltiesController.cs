@@ -92,7 +92,6 @@ namespace PenaltyBox.API.Controllers
                 seasonType = null;
             }
 
-            // Need to Handle Refs
             return await _context.Penalties.Where((penalty) => String.IsNullOrEmpty(penaltyName) || penaltyList.Contains(penalty.PenaltyName))
                                            .Where((penalty) => String.IsNullOrEmpty(playerName) || playerList.Contains(penalty.Player))
                                            .Where((penalty) => String.IsNullOrEmpty(teamName) || teamList.Contains(penalty.Team))
